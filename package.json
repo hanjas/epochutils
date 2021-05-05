@@ -1,6 +1,6 @@
 {
   "name": "epochutils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An opensource epoch utility functions",
   "main": "src/index.js",
   "scripts": {
