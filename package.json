@@ -1,0 +1,24 @@
+{
+  "name": "epochutils",
+  "version": "1.0.1",
+  "description": "An opensource epoch utility functions",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "epoch",
+    "epochconverter",
+    "date",
+    "datetime"
+  ],
+  "author": "Hanjas",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hanjas/epochutils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hanjas/epochutils/issues"
+  }
+}
