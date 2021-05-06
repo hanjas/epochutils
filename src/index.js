@@ -67,7 +67,11 @@ const handleEpoch = (epoch) => {
     }
     
     function getLocal() {
-        return epoch
+        return epoch;
+    }
+    
+    function getTime() {
+        return epoch;
     }
 
     function getDateObj() {
