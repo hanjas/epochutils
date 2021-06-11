@@ -1,85 +1,74 @@
-const ONE_MINUTE = 60 * 1000;
-const ONE_HOUR = ONE_MINUTE * 60;
-const ONE_DAY = ONE_HOUR * 24;
-const formatMap = {
-    'yyyy': 'year',
-    'YYYY': 'year',
-    'yy': 'shortYear',
-    'YY': 'shortYear',
-    'MM': 'month',
-    'dd': 'day',
-    'DD': 'day',
-    'HH': 'hours',
-    'mm': 'minutes',
-    'ss': 'seconds'
-}
+const cons = require('./constants');
 
-const handleEpoch = (epoch) => {
+const handleEpoch = (currTime) => {
 
     function addMinute(n) {
-        return epoch + (n * ONE_MINUTE);
-    }
-
-    function addHour(n) {
-        return epoch + (n + ONE_HOUR)
-    }
-
-    function addDay(n) {
-        return epoch + (n * ONE_DAY);
-    }
-
-    function addYear(n) {
-        const d = new Date(epoch);
-        d.setFullYear(d.getFullYear()+1)
-        return d.getTime();
+        return handleEpoch(currTime + (n * cons.ONE_MINUTE));
     }
 
     function subMinute(n) {
-        return epoch - (n * ONE_MINUTE);
+        return handleEpoch(currTime - (n * cons.ONE_MINUTE));
+    }
+
+    function addHour(n) {
+        return handleEpoch(currTime + (n + cons.ONE_HOUR));
     }
 
     function subHour(n) {
-        return epoch - (n + ONE_HOUR)
+        return handleEpoch(currTime - (n + cons.ONE_HOUR));
+    }
+
+    function addDay(n) {
+        return handleEpoch(currTime + (n * cons.ONE_DAY));
     }
 
     function subDay(n) {
-        return epoch - (n * ONE_DAY);
+        return handleEpoch(currTime - (n * cons.ONE_DAY));
+    }
+
+    function addYear(n) {
+        const d = new Date(currTime);
+        d.setFullYear(d.getFullYear()+1);
+
+        return handleEpoch(d.getTime());
     }
 
     function subYear(n) {
-        const d = new Date(epoch);
+        const d = new Date(currTime);
         d.setFullYear(d.getFullYear()-1)
-        return d.getTime();
+
+        return handleEpoch(d.getTime());
     }
 
     function todayUTC() {
-        return epoch - (epoch % ONE_DAY);
+        return currTime - (currTime % cons.ONE_DAY);
     }
 
     function todayLocal() {
-        let localoffset = new Date().getTimezoneOffset() * ONE_MINUTE;
+        let localoffset = new Date().getTimezoneOffset() * cons.ONE_MINUTE;
         return todayUTC() + localoffset;
     }
 
     function getUTC() {
-        let localoffset = new Date().getTimezoneOffset() * ONE_MINUTE;
-        return epoch - localoffset;
+        let localoffset = new Date().getTimezoneOffset() * cons.ONE_MINUTE;
+        return currTime - localoffset;
     }
     
     function getLocal() {
-        return epoch;
+        return currTime;
     }
     
     function getTime() {
-        return epoch;
+        return currTime;
     }
 
     function getDateObj() {
-        const date = new Date(epoch);
+        const date = new Date(currTime);
         const dateObj = {
             year : date.getFullYear(),
             shortYear : date.getFullYear()%100,
             month : ('0' + (date.getMonth() + 1)).slice(-2),
+            shortMonth : cons.SHORT_MONTH_LIST[date.getMonth()-1],
             day : ('0' + date.getDate()).slice(-2),
             hours : ('0' + date.getHours()).slice(-2),
             shortHour : (date.getHours() > 12) ? ('0' + (date.getHours()-12)).slice(-2) : date.getHours(),
@@ -94,7 +83,7 @@ const handleEpoch = (epoch) => {
 
         const dateObj = getDateObj();
         inpformat = (inpformat.includes('a')) ? inpformat.replace('HH', dateObj.shortHour).replace("a", dateObj.AMPM) : inpformat;
-        for (const [key, value] of Object.entries(formatMap)) {
+        for (const [key, value] of Object.entries(cons.formatMap)) {
             inpformat = inpformat.replace(key, dateObj[value]);
         }
 
@@ -113,16 +102,16 @@ const handleEpoch = (epoch) => {
         addMinute, addHour, addDay, addYear,
         subMinute, subHour, subDay, subYear,
         todayUTC, todayLocal, getUTC, getLocal,
-        format, toString, getDateObj
+        format, toString, getDateObj, getTime
     }
 }
 
 
 function epochUtil(timestamp) {
 
-    let epoch = (timestamp) ? timestamp : Date.now();
+    let currTime = (timestamp) ? timestamp : Date.now();
 
-    return handleEpoch(epoch);
+    return handleEpoch(currTime);
 }
 
 module.exports = {
